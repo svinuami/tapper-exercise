@@ -9,17 +9,60 @@
 import UIKit
 
 class ViewController: UIViewController {
+    
+    var maxTaps = 0
+    var currTapCount = 0
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
+    @IBOutlet weak var logoImg : UIImageView!
+    @IBOutlet weak var playBtn : UIButton!
+    @IBOutlet weak var coinBtn : UIButton!
+    @IBOutlet weak var totalTapsLbl : UILabel!
+    @IBOutlet weak var howManyTapsInput: UITextField!
+    
+    @IBAction func onPlayButton(sender: UIButton) {
+        
+        if(howManyTapsInput.text != nil && howManyTapsInput.text != "") {
+            updateHideStatus(false)
+            
+            maxTaps = Int(howManyTapsInput.text!)!
+            currTapCount = 0
+            updateLabelWithCount()
+        }
     }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+    
+    @IBAction func onTapButton(sender: UIButton) {
+        currTapCount+=1
+        
+        if(isGameOver()){
+            restartGame()
+        }else {
+            updateLabelWithCount()
+        }
     }
-
+    
+    func restartGame() {
+        howManyTapsInput.text = ""
+        maxTaps = 0
+        updateHideStatus(true)
+    }
+    
+    func isGameOver() -> Bool {
+        return currTapCount >= maxTaps
+    }
+    
+    func updateLabelWithCount() {
+        totalTapsLbl.text = "\(currTapCount) Taps"
+    }
+    
+    func updateHideStatus(restart : Bool) {
+        logoImg.hidden = !restart
+        playBtn.hidden = !restart
+        howManyTapsInput.hidden = !restart
+        
+        coinBtn.hidden = restart
+        totalTapsLbl.hidden = restart
+    }
+    
 
 }
 
